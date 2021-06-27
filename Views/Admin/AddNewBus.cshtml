@@ -1,0 +1,73 @@
+﻿@model Bus
+
+@{
+    ViewBag.Title = "Add New Bus";
+}
+
+<a asp-action="ViewBusList" asp-controller="Admin" class="btn btn-danger">Back</a>
+<h2 class="text-center">Add New Bus</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" asp-action="AddNewBus" asp-controller="Admin">
+            <!--User Information-->
+            <div class="card m-1">
+                <div class="card-header bg-danger text-light">Bus Information</div>
+                <div class="card-body bg-light">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="BusType"></label>
+                            <select asp-for="BusType" asp-items="Html.GetEnumSelectList<BusTypes>()" class="form-control"></select>
+                            <span asp-validation-for="BusType" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="TotalSeat"></label>
+                            <input asp-for="TotalSeat" class="form-control" />
+                            <span asp-validation-for="TotalSeat" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="BusName"></label>
+                            <input asp-for="BusName" class="form-control" />
+                            <span asp-validation-for="BusName" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="BusVehicleNumber"></label>
+                            <input asp-for="BusVehicleNumber" class="form-control" />
+                            <span asp-validation-for="BusVehicleNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="BusTime"></label>
+                            <input asp-for="BusTime" class="form-control" type="datetime" />
+                            <span asp-validation-for="BusTime" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="BusOperatorId"></label>
+                            <select asp-for="BusOperatorId" asp-items="@ViewBag.AvailBusOperatorUserList" class="form-control">
+                                <option value="">Please Select</option>
+                            </select>
+                            <span asp-validation-for="BusOperatorId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="RouteSequence"></label>
+                            <input asp-for="RouteSequence" class="form-control" />
+                            <span asp-validation-for="RouteSequence" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">Add Bus</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

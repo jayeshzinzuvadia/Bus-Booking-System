@@ -1,0 +1,54 @@
+﻿@model ApplicationUser
+
+@{
+    ViewBag.Title = "My Profile";
+}
+
+<h2 class="text-center">My Profile</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        <!--User Information-->
+        <div class="card m-1">
+            <div class="card-header bg-danger text-light">Profile Information</div>
+            <div class="card-body bg-light">
+                <div class="row">
+                    <div class="col form-group">
+                        <label asp-for="Id"></label>
+                        <input disabled asp-for="Id" class="form-control" />
+                    </div>
+                    <div class="col form-group">
+                        <label asp-for="UserType"></label>
+                        <input disabled asp-for="UserType" class="form-control">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label asp-for="DisplayName"></label>
+                        <input disabled asp-for="DisplayName" class="form-control" />
+                    </div>
+                    <div class="col form-group">
+                        <label asp-for="DateOfBirth"></label>
+                        <input disabled asp-for="DateOfBirth" class="form-control" type="date" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label asp-for="Gender" class="control-label"></label>
+                        <input disabled asp-for="Gender" class="form-control" />
+                    </div>
+                    <div class="col form-group">
+                        <label asp-for="PhoneNumber"></label>
+                        <input disabled asp-for="PhoneNumber" class="form-control" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col form-group">
+                        <label class="control-label">Email</label>
+                        <input disabled class="form-control" value="@ViewBag.UserName"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

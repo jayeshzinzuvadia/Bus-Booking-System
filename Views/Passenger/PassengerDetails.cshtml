@@ -1,0 +1,109 @@
+﻿@model PassengerInfoViewModel
+
+@{
+    ViewBag.Title = "Passenger Details";
+    int i = 0;
+}
+
+<!--Progress Bar-->
+<div class="progress" style="height: 30px;">
+    <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">1) Select Bus</div>
+    </div>
+    <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">2) Book Seat</div>
+    </div>
+    <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">3) Passenger Details</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">4) Ticket Payment</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">5) Download Ticket</div>
+    </div>
+</div>
+
+<h2 class="text-center mt-3">Fill Passenger Details</h2>
+<hr class="bg-danger" />
+
+<!--BusSearchResults List-->
+@if (ViewBag.SeatCount > 0)
+{
+    <div class="row mb-3 mt-3">
+        <div class="col font-weight-bold">
+            Total Selected Seats: @ViewBag.SeatCount
+        </div>
+    </div>
+
+    <form method="post" asp-action="TicketPayment" asp-controller="Passenger">
+        @for(int id = 0; id < Model.PInfo.Count; id++)
+        {
+            <div class="card">
+                <div class="card-header bg-danger text-light">
+                    Passenger @{i++;} @i Information
+                </div>
+                <div class="card-body">
+                    <div class="row">                        
+                        <div class="col form-group">
+                            <label asp-for="@Model.PInfo[id].PSeatNo"></label>
+                            <input asp-for="@Model.PInfo[id].PSeatNo" class="form-control" disabled />
+                            <input type="hidden" asp-for="@Model.PInfo[id].PSeatNo" value="@Model.PInfo[id].PSeatNo"/> 
+                            <span asp-validation-for="@Model.PInfo[id].PSeatNo" class="text-danger"></span>
+                        </div>       
+                        <div class="col form-group">
+                            <label asp-for="@Model.PInfo[id].PName"></label>
+                            <input asp-for="@Model.PInfo[id].PName" class="form-control" />
+                            <span asp-validation-for="@Model.PInfo[id].PName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="@Model.PInfo[id].PGender" class="control-label"></label>
+                            <select asp-for="@Model.PInfo[id].PGender" asp-items="Html.GetEnumSelectList<Gender>()" class="form-control"></select>
+                            <span asp-validation-for="@Model.PInfo[id].PGender" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="@Model.PInfo[id].PAge"></label>
+                            <input asp-for="@Model.PInfo[id].PAge" class="form-control" value=""/>
+                            <span asp-validation-for="@Model.PInfo[id].PAge" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (i == 1)
+            {
+                <div class="card">
+                    <div class="card-header bg-danger text-light">
+                        Contact Details
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col form-group">
+                                <label asp-for="@Model.PEmail"></label>
+                                <input asp-for="@Model.PEmail" class="form-control"/>
+                                <span asp-validation-for="@Model.PEmail" class="text-danger"></span>
+                            </div>
+                            <div class="col form-group">
+                                <label asp-for="@Model.PPhoneNumber"></label>
+                                <input asp-for="@Model.PPhoneNumber" class="form-control" />
+                                <span asp-validation-for="@Model.PPhoneNumber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-danger">Proceed to Pay</button>
+        </div>
+    </form>
+}
+else
+{
+    <div class="card">
+        <div class="card-header text-danger">
+            Select seats first
+        </div>
+    </div>
+}

@@ -1,0 +1,35 @@
+﻿@model ManageBookingsViewModel
+
+@{
+    ViewBag.Title = "Manage Bookings";
+}
+
+<h2 class="text-center">Manage Bookings</h2>
+
+<div class="row mt-4">
+    <div class="col">
+        <!--Trip Details-->
+        <div class="card m-1">
+            <div class="card-header bg-danger text-light">Enter Ticket Details</div>
+            <form method="post" asp-action="ManageBookings" asp-controller="Passenger">
+                <div class="card-body bg-light">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="TicketId"></label>
+                            <input asp-for="TicketId" class="form-control" />
+                            <span asp-validation-for="TicketId" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="PEmail"></label>
+                            <input asp-for="PEmail" class="form-control" />
+                            <span asp-validation-for="PEmail" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

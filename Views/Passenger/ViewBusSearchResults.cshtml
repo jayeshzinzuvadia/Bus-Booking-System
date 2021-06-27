@@ -1,0 +1,130 @@
+﻿@model BusSearchResultViewModel
+
+@{
+    ViewBag.Title = "Search Bus";
+}
+
+<!--Progress Bar-->
+<div class="progress" style="height: 30px;">
+    <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">1) Select Bus</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">2) Book Seat</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">3) Passenger Details</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">4) Ticket Payment</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">5) Download Ticket</div>
+    </div>
+</div>
+
+<h2 class="text-center mt-3">Bus Search Results</h2>
+
+<!--Trip Details-->
+<div class="text-center">
+    From <b>@ViewBag.Source</b> to <b>@ViewBag.Destination</b> on <b>@ViewBag.DateOfJourney</b>
+</div>
+
+<hr class="bg-danger" />
+
+<!--Filter Options here-->
+<div class="row">
+    <div class="col">
+        <a class="btn btn-danger" asp-action="Home" asp-controller="Passenger">Back</a>
+    </div>
+    <div class="col form-group">
+        <select asp-for="BusTypes" id="busTypeId" onchange="filterSearchResults()" asp-items="Html.GetEnumSelectList<BusTypes>()" class="form-control">
+            <option value="0">All Buses</option>
+        </select>
+    </div>
+</div>
+
+
+<!--BusSearchResults List-->
+@if (ViewBag.TotalSearchBusCount > 0)
+{
+    <div class="row mb-3 mt-3">
+        <div class="col font-weight-bold">
+            Total Buses Found: @ViewBag.TotalSearchBusCount
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr class="text-center">
+                <th>Bus Name</th>
+                <th>Type</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Price</th>
+                <th>Available Seats</th>
+                <th>Ratings</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var bus in Model.BusList)
+            {
+                <tr class="text-center">
+                    <td>@bus.Bus.BusName </td>
+                    <td>@bus.Bus.BusType</td>
+                    <td>@bus.BusRoute.DepartureTime.ToShortTimeString()</td>
+                    <td>@bus.BusRoute.ArrivalTime.ToShortTimeString()</td>
+                    <td>
+                        <i class="fa fa-rupee"></i>
+                        @bus.BusRoute.TicketPrice
+                    </td>
+                    @if (bus.Seat != null)
+                    {
+                        <td>@bus.Seat.AvailableSeats</td>
+                    }
+                    else
+                    {
+                        <td>@bus.Bus.TotalSeat</td>
+                    }
+                    @if (bus.Bus.Ratings != null)
+                    {
+                        <td>
+                            <h6><span class="badge badge-warning text-light">@bus.Bus.Ratings &#9733;</span></h6>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                <td>
+                    <div class="row">
+                        <div class="col">
+                            <form method="get" asp-controller="Passenger" asp-action="ViewSeatLayout">
+                                <input type="hidden" name="busRouteId" asp-for="@bus.BusRoute.BusRouteId">
+                                <input type="hidden" name="date" asp-for="@Model.DateOfJourney">
+                                <button type="submit" class="btn btn-danger">Book Seats</button>
+                            </form>
+                        </div>
+                    </div>
+                </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="card">
+        <div class="card-header text-danger">
+            No @Model.BusTypes Bus Found
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    function filterSearchResults() {
+        var busType = document.getElementById("busTypeId").value;
+        window.location.href = '@Url.Action("ViewBusSearchResults", "Passenger")?Source=@ViewBag.Source&Destination=@ViewBag.Destination&DateOfJourney=@ViewBag.DateParam&busType=' + busType;
+    }
+</script>

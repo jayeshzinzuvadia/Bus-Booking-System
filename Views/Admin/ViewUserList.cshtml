@@ -1,0 +1,106 @@
+﻿@model UserListViewModel
+
+@{
+    ViewBag.Title = "View User List";
+}
+
+<h2 class="text-center">View User List</h2>
+<hr class="bg-danger"/>
+
+<div class="row mt-3">
+    <div class="col">
+        <a class="btn btn-danger mb-3" style="width:auto" asp-action="AddNewUser" asp-controller="Admin">
+            Add New User
+        </a>
+    </div>
+    <div class="col">
+        <select id="userTypeId" onchange="buildUserListView()" asp-for="UserType" class="form-control">
+            <option class="form-control" value="@AppConstant.BUS_OPERATOR">@AppConstant.BUS_OPERATOR</option>
+            <option class="form-control" value="@AppConstant.PASSENGER">@AppConstant.PASSENGER</option>
+            <option class="form-control" value="@AppConstant.ADMIN">@AppConstant.ADMIN</option>
+        </select>
+    </div>
+</div>
+
+@if (ViewBag.TotalUsers > 0)
+{    
+    <div class="row mb-3">
+        <div class="col font-weight-bold">
+            Total Users : @ViewBag.TotalUsers
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>User Type</th>
+                <th>Gender</th>
+                <th>Mobile Number</th>                
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(int id = 0; id < ViewBag.TotalUsers; id++)
+            {
+                <tr>
+                    <td>@Model.ApplicationUserList[id].DisplayName</td>
+                    <td>@Model.ApplicationUserList[id].UserType</td>
+                    <td>@Model.ApplicationUserList[id].Gender</td>
+                    <td>@Model.ApplicationUserList[id].PhoneNumber</td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <form asp-action="RemoveUser" asp-route-id="@Model.ApplicationUserList[id].Id" asp-controller="Admin" method="post">
+                                    <a class="btn btn-outline-danger" asp-action="UserDetails" asp-controller="Admin" asp-route-id="@Model.ApplicationUserList[id].Id">Details</a>
+                                    <a class="btn btn-outline-danger" asp-action="UpdateUser" asp-controller="Admin" asp-route-id="@Model.ApplicationUserList[id].Id">Update</a>
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal_@id">
+                                        Remove
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal_@id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel_@id" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel_@id">Remove User</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div>Are you sure you want to remove this user and delete all the data?</div>
+                                                    <div>
+                                                        <b class="text-danger">You must remove all the positions offered to this user before removing.</b>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>                        
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="card">
+        <div class="card-header text-danger">
+            User List is empty
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    function buildUserListView() {
+        var userType = document.getElementById("userTypeId").value;
+        window.location.href = '@Url.Action("ViewUserList", "Admin")?userType=' + userType;
+    }
+</script>

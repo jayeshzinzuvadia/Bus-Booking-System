@@ -1,0 +1,152 @@
+﻿@inject SignInManager<ApplicationUser> signInManager
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <environment include="Development">
+        <link href="~/lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validate/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet"
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+              integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+              crossorigin="anonymous"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only"
+              asp-fallback-test-property="position"
+              asp-fallback-test-value="absolute"
+              asp-suppress-fallback-integrity="true">
+    </environment>
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <title>@ViewBag.Title</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm bg-danger navbar-dark">
+            <div class="container">
+                <a class="navbar-brand" asp-action="Home" asp-controller="Passenger">
+                    <i class="fa fa-bus fa-lg"></i>
+                    Bus Booking System
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                        data-target="#collapsibleNavbar">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+                    <ul class="navbar-nav">
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            if (User.IsInRole(AppConstant.ADMIN))
+                            {
+                                <!--Navigation Menu for Admin-->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="ViewBusList">
+                                        Manage Bus
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Admin" asp-action="ViewUserList">
+                                        Manage Users
+                                    </a>
+                                </li>
+                                if (User.IsInRole(AppConstant.MASTER))
+                                {
+                                    <!--Navigation Menu for Master-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Admin" asp-action="ListRoles">
+                                            Manage Roles
+                                        </a>
+                                    </li>
+                                }
+                            }
+                            else if (User.IsInRole(AppConstant.BUS_OPERATOR))
+                            {
+                                <!--Navigation Menu for Bus Operator-->
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="BusOperator" asp-action="ViewBookingList">
+                                        Manage Passengers
+                                    </a>
+                                </li>
+                            }
+                            else if (User.IsInRole(AppConstant.PASSENGER))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Passenger" asp-action="ManageBookings">
+                                        Manage Bookings
+                                    </a>
+                                </li>                                
+                            }
+                        }
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        @*If the user is signed-in display Logout link*@
+                        @if (signInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown1" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-user fa-lg"></i>
+                                    @User.Identity.Name
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
+                                    <a class="dropdown-item" asp-controller="Account" asp-action="MyProfile" asp-route-userName="@User.Identity.Name">My Profile</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form method="post" asp-controller="Account" asp-action="Logout">
+                                        <button type="submit" style="width:auto" class="dropdown-item">Logout</button>
+                                    </form>
+                                </div>
+                            </li>
+                        }
+                        else
+                        {
+                            <!--Navigation Menu For NOT Logged-In User-->
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="register">
+                                    Register
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="login">
+                                    Login
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <main role="main" class="mt-3 pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @*<footer class="footer border-top fixed-bottom text-center mb-3 text-muted">
+           <div class="container">
+               &copy; 2020 - Online Bus Booking System
+               <div class="small">
+                   <a href="#">Privacy</a> |
+                   <a href="#">Terms & Conditions</a> |
+                   <a href="#">About Us</a> |
+                   <a href="#">Contact</a> |
+                   <a href="#">Help</a>
+               </div>
+           </div>
+        </footer>*@
+
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", required: false)
+    }
+    
+</body>
+</html>

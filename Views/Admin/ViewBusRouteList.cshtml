@@ -1,0 +1,103 @@
+﻿@model BusRouteListViewModel
+
+@{
+    ViewBag.Title = "View Bus Route List";
+    var busRoute = Model.BusRouteList;
+}
+
+<a asp-action="ViewBusList" asp-controller="Admin" class="btn btn-danger">Back</a>
+
+<!--BusRouteList starts-->
+<h2 class="text-center mt-1">Bus Route List of @Model.Bus.BusName</h2>
+<h4 class="text-center">@Model.Bus.RouteSequence</h4>
+<hr class="bg-danger" />
+
+<div class="row mt-3">
+    <div class="col">
+        <a class="btn btn-danger mb-3" style="width:auto"
+           asp-action="AddNewBusRoute"
+           asp-controller="Admin"
+           asp-route-busId="@Context.Request.Query["busId"]">
+            Add New Route
+        </a>
+    </div>
+</div>
+
+@if (ViewBag.TotalNoOfBusRoutes > 0)
+{
+    <div class="row mb-3">
+        <div class="col font-weight-bold">
+            Total Bus Routes : @ViewBag.TotalNoOfBusRoutes
+        </div>
+    </div>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Route Order</th>
+                <th>Source</th>
+                <th>Destination</th>
+                <th>Departure Time</th>
+                <th>Arrival Time</th>
+                <th>Ticket Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int id = 0; id < ViewBag.TotalNoOfBusRoutes; id++)
+            {
+                <tr>
+                    <td>@busRoute[id].RouteOrder</td>
+                    <td>@busRoute[id].Source</td>
+                    <td>@busRoute[id].Destination</td>
+                    <td>@busRoute[id].DepartureTime.ToShortTimeString()</td>
+                    <td>@busRoute[id].ArrivalTime.ToShortTimeString()</td>                    
+                    <td><i class="fa fa-rupee"></i> @busRoute[id].TicketPrice</td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <form asp-action="RemoveBusRoute" asp-controller="Admin" asp-route-busRouteId="@busRoute[id].BusRouteId" method="post">
+                                    <a class="btn btn-outline-danger" asp-action="UpdateBusRoute" asp-controller="Admin"
+                                       asp-route-busRouteId="@busRoute[id].BusRouteId"
+                                       asp-route-busId="@busRoute[id].BusId">
+                                        Update
+                                    </a>
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal_@id">
+                                        Remove
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal_@id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel_@id" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel_@id">Remove Bus Route</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to remove this bus route and delete all the data?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="card">
+        <div class="card-header text-danger">
+            Bus Route List is empty
+        </div>
+    </div>
+}

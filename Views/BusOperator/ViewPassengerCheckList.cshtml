@@ -1,0 +1,71 @@
+﻿@model List<PassengerCheckListViewModel>
+
+@{
+    ViewBag.Title = "View Passenger Check List";
+}
+
+<h2 class="text-center mt-3">Passenger's Check List</h2>
+<hr class="bg-danger" />
+
+<div class="text-light mb-3">
+    <a asp-action="ViewBookingList" asp-controller="BusOperator" class="btn btn-danger">Back</a>
+</div>
+
+<!--Booked Passenger Info List-->
+@if (Model.Count() > 0)
+{
+    <form method="post">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th></th>                
+                    <th>Seat No.</th>
+                    <th>Passenger Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Source</th>
+                    <th>Destination</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int id = 0; id < Model.Count(); id++)
+                {
+                    <tr>
+                        <td>
+                            <input type="hidden" asp-for="@Model[id].TicketId" />
+                            <input type="hidden" asp-for="@Model[id].Passenger.PName" />
+                            <input type="hidden" asp-for="@Model[id].Passenger.PGender" />
+                            <input type="hidden" asp-for="@Model[id].Passenger.PAge" />
+                            <input type="hidden" asp-for="@Model[id].Passenger.PSeatNo" />
+                            <div class="form-check">
+                                <input style="width: 16px; height: 16px;" asp-for="@Model[id].IsChecked" class="form-check-input" type="checkbox" />
+                            </div>
+                        </td>
+                        <td>@Model[id].Passenger.PSeatNo</td>
+                        <td>
+                            <label asp-for="@Model[id].IsChecked" class="form-check-label">
+                                @Model[id].Passenger.PName
+                            </label>
+                        </td>
+                        <td>@Model[id].Passenger.PGender</td>
+                        <td>@Model[id].Passenger.PAge</td>
+                        <td>@Model[id].Source</td>
+                        <td>@Model[id].Destination</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-center mt-3">
+		    <input type="submit" class="btn btn-danger" style="width:auto" value="Submit"/>
+	    </div>
+    </form>
+}
+else
+{
+    <div class="card">
+        <div class="card-header text-danger">
+            Booking List is empty
+        </div>
+    </div>
+}
+

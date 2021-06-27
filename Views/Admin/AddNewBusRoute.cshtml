@@ -1,0 +1,80 @@
+﻿@model BusRoute
+
+@{
+    ViewBag.Title = "Add New Bus Route";
+}
+
+<a asp-action="ViewBusRouteList" asp-route-busId="@Context.Request.Query["busId"]"
+   asp-controller="Admin" class="btn btn-danger">Back</a>
+
+<h2 class="text-center">Adding Route to <b>@ViewBag.BusName</b></h2>
+<h4 class="text-center">@ViewBag.RouteSequence</h4>
+
+<div class="row">
+    <div class="col-md-12">
+        <form method="post">
+            <!--Bus Route Information-->
+            <div class="card m-1">
+                <div class="card-header bg-danger text-light">Bus-Route Information</div>
+                <div class="card-body bg-light">
+                    <div class="row">
+                        <div class="col">
+                            <input type="hidden" value="@Context.Request.Query["busId"]">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="RouteOrder"></label>
+                            <input asp-for="RouteOrder" class="form-control" />
+                            <span asp-validation-for="RouteOrder" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="TicketPrice"></label>
+                            <input asp-for="TicketPrice" class="form-control" />
+                            <span asp-validation-for="TicketPrice" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="Source"></label>
+                            <input asp-for="Source" class="form-control" />
+                            <span asp-validation-for="Source" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="Destination"></label>
+                            <input asp-for="Destination" class="form-control" />
+                            <span asp-validation-for="Destination" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="DepartureTime"></label>
+                            <input asp-for="DepartureTime" class="form-control" />
+                            <span asp-validation-for="DepartureTime" class="text-danger"></span>
+                        </div>
+                        <div class="col form-group">
+                            <label asp-for="ArrivalTime"></label>
+                            <input asp-for="ArrivalTime" class="form-control"/>
+                            <span asp-validation-for="ArrivalTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <div class="col form-group">
+                            <label asp-for="BusId"></label>
+                            <input asp-for="BusId" class="form-control" value="@ViewBag."/>
+                            <select asp-for="BusId" class="form-control" asp-items="@ViewBag.BusId"></select>
+                            <span asp-validation-for="BusId" class="text-danger"></span>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-danger">Add Bus Route</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

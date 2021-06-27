@@ -1,0 +1,48 @@
+﻿@model PassengerHomeViewModel
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<h2 class="text-center">Time for Travel!</h2>
+
+<div class="row mt-4">
+    <div class="col-lg-7">
+        <!--Trip Details-->
+        <div class="card m-1">
+            <div class="card-header bg-danger text-light">Enter Trip Details</div>
+            <form method="get" asp-action="ViewBusSearchResults" asp-controller="Passenger">
+                <div class="card-body bg-light">
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="Source"></label>
+                            <input asp-for="Source" class="form-control" />
+                            <span asp-validation-for="Source" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="Destination"></label>
+                            <input asp-for="Destination" class="form-control" />
+                            <span asp-validation-for="Destination" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col form-group">
+                            <label asp-for="DateOfJourney"></label>
+                            <input asp-for="DateOfJourney" class="form-control" />
+                            <span asp-validation-for="DateOfJourney" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-danger">Search Bus</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <img src="~/images/passengerhome2.jpg" height="380" class="w-100">
+    </div>
+</div>
+

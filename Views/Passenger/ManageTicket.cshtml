@@ -1,0 +1,134 @@
+﻿@model PassengerTicketViewModel
+
+@{
+    ViewBag.Title = "Manage Ticket";
+}
+
+<h2 class="text-center mt-3">Manage Ticket</h2>
+<hr class="bg-danger" />
+
+<!--Button Views-->
+<div class="row m-2">
+    <a asp-controller="Passenger" asp-action="ManageBookings" class="btn btn-danger mr-2">Back</a>
+    @if (Model.Ticket.TicketStatus == AppConstant.BOOKED)
+    {
+        <form asp-controller="Passenger" asp-action="CancelTicket" method="post">
+            <input type="hidden" name="ticketId" value="@Model.Ticket.TicketId">
+            <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#exampleModal">
+                Cancel Ticket
+            </button>
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Cancel Ticket for @Model.Ticket.BusName Bus</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>Are you sure you want to cancel the ticket?</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Cancel Ticket</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+    else if (Model.Ticket.TicketStatus == AppConstant.CHECKED)
+    {
+        <button type="button" class="btn btn-danger mr-2" data-toggle="modal" data-target="#exampleModal">
+            Rate Bus
+        </button>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <form asp-action="RateBus" asp-controller="Passenger" method="post">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Rate Bus for @Model.Ticket.BusName</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div>Rate Bus from Range 1 to 5</div>
+                            <input type="hidden" name="ticketId" value="@Model.Ticket.TicketId">
+                            <input class="form-control-range" type="range" min="1" max="5" name="userRatings" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-danger">Rate</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+</div>
+
+<div class="card mt-3 mb-3">
+    <div class="card-header text-light bg-danger">
+        Bus Ticket Details
+    </div>
+    <div class="card-body">
+        <table class="table table-borderless">
+            <tbody>
+                <!--Ticket Details-->
+                <tr>
+                    <td><b>Ticket Id:</b></td>
+                    <td>@Model.Ticket.TicketId</td>
+                    <td><b>PNR Code:</b></td>
+                    <td>@Model.Ticket.PNRCode</td>
+                </tr>
+                <tr>
+                    <td><b>Source:</b></td>
+                    <td>@Model.Ticket.Source</td>
+                    <td><b>Destination:</b></td>
+                    <td>@Model.Ticket.Destination</td>
+                </tr>
+                <tr>
+                    <td><b>Departure Time:</b></td>
+                    <td>@Model.Ticket.DepartureTime.ToShortTimeString()</td>
+                    <td><b>Arrival Time:</b></td>
+                    <td>@Model.Ticket.ArrivalTime.ToShortTimeString()</td>
+                </tr>
+                <tr>
+                    <td><b>Date of Journey:</b></td>
+                    <td>@Model.Ticket.DateOfJourney.ToLongDateString()</td>
+                    <td><b>Ticket Price:</b></td>
+                    <td><i class="fa fa-rupee"></i> @Model.Ticket.TicketPrice</td>
+                </tr>
+                <!--Bus Details-->
+                <tr>
+                    <td><b>Bus Name:</b></td>
+                    <td>@Model.Ticket.BusName</td>
+                    <td><b>Bus Vehicle No.:</b></td>
+                    <td>@Model.Ticket.BusVehicleNumber</td>
+                </tr>
+                <!--Passenger Details-->
+                <tr>
+                    <td><b>Passenger Count:</b></td>
+                    <td>@Model.Ticket.PassengerCount</td>
+                </tr>
+                @foreach (var passenger in Model.Passengers)
+                {
+                    <tr>
+                        <td><b>Passenger Name:</b></td>
+                        <td>@passenger.PName</td>
+                        <td><b>Seat No.:</b></td>
+                        <td>@passenger.PSeatNo</td>
+                    </tr>
+                    <tr>
+                        <td><b>Age:</b></td>
+                        <td>@passenger.PAge</td>
+                        <td><b>Gender:</b></td>
+                        <td>@passenger.PGender</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

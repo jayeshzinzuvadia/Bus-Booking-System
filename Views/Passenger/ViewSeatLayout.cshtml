@@ -1,0 +1,173 @@
+﻿@model BusSeatLayoutViewModel
+
+@{
+    ViewBag.Title = "Seat Layout";
+    int row = 5, mod = 3;   // BusTypes.Seater
+    if (Model.Bus.BusType == BusTypes.Sleeper)
+    {
+        row = 3; mod = 2;
+    }
+    else if (Model.Bus.BusType == BusTypes.AC)
+    {
+        row = 4; mod = 3;
+    }
+}
+
+<!--Progress Bar-->
+<div class="progress" style="height: 30px;">
+    <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">1) Select Bus</div>
+    </div>
+    <div class="progress-bar bg-success" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">2) Book Seat</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">3) Passenger Details</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">4) Ticket Payment</div>
+    </div>
+    <div class="progress-bar bg-secondary" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+        <div class="text-center">5) Download Ticket</div>
+    </div>
+</div>
+
+<h2 class="text-center mt-3">View Seat Layout of "@Model.Bus.BusName"</h2>
+<hr class="bg-danger" />
+
+<div class="row">
+
+    <!--Seat Layout-->
+    <div class="col-lg-7 vw-100 mb-2">
+        <div class="card">
+            <div class="card-header bg-danger text-light">Select Seats</div>
+            <div class="card-body">
+                <div class="container text-right mb-2">
+                    <img src="~/images/steering.png" height="100">
+                </div>
+                <div class="container">
+                    @for (int i = 1; i <= Model.Bus.TotalSeat; i += row)
+                    {
+                        <div class="card-group flex-row flex-nowrap">
+                            @for (int j = i; j < i + row; j++)
+                            {
+                                @if (j % row == mod)
+                                {
+                                    <div class="col"></div>
+                                }
+                                @if (Model.BookedSeats.Contains(j))
+                                {
+                                    <div id="seatCardDiv_@j" class="card bg-secondary">
+                                        <div class="card-body">
+                                            <h3 id="seatCardH3_@j" class="card-sub text-light text-center">@j</h3>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div id="seatCardDiv_@j" onclick="setSeatState(@j)" class="card bg-light">
+                                        <div class="card-body">
+                                            <h3 id="seatCardH3_@j" class="card-sub text-dark text-center">@j</h3>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Trip Details-->
+    <div class="col-lg-5">
+        <div class="card mb-2">
+            <div class="card-header bg-danger text-light">
+                Trip Details
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    Date of Journey : @Model.DateOfJourney.ToLongDateString()
+                </li>
+                <li class="list-group-item">
+                    Source : @Model.BusRoute.Source
+                </li>
+                <li class="list-group-item">
+                    Destination : @Model.BusRoute.Destination
+                </li>
+                <li class="list-group-item">
+                    Departure Time : @Model.BusRoute.DepartureTime.ToShortTimeString()
+                </li>
+                <li class="list-group-item">
+                    Arrival Time : @Model.BusRoute.ArrivalTime.ToShortTimeString()
+                </li>
+                <li class="list-group-item" id="selectedSeatsItemFieldId">
+                    Selected Seats :
+                </li>
+                <li class="list-group-item" id="totalAmountItemFieldId">
+                    Total Ticket Price :
+                </li>
+            </ul>
+        </div>
+        <div class="text-center">
+            <form asp-action="PassengerDetails" onsubmit="return getSeatCount();" asp-controller="Passenger" method="post">
+                <input type="hidden" id="seatCountId" name="seatCount" />
+                <input type="hidden" id="selectedSeatsId" name="selectedSeats" />
+                <input type="hidden" id="ticketPriceId" name="ticketPrice" />
+                <button type="submit" class="btn btn-danger">Fill Passenger Details</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var count = 0, totalAmount = @Model.BusRoute.TicketPrice;
+    var selection = new Array();
+
+    function setSeatState(j)
+    {
+        var seatCardDiv = document.getElementById("seatCardDiv_" + j);
+        var seatCardH3 = document.getElementById("seatCardH3_" + j);
+        // For List Items
+        var selectedSeatsItemField = document.getElementById("selectedSeatsItemFieldId");
+        var totalAmountItemField = document.getElementById("totalAmountItemFieldId");
+        // For Input Hidden Fields
+        var seatCountInp = document.getElementById("seatCountId");
+        var selectedSeatsInp = document.getElementById("selectedSeatsId");
+        var ticketPriceInp = document.getElementById("ticketPriceId");
+
+        if (seatCardDiv.className.includes("bg-success")) {
+            count--;
+            const index = selection.indexOf(j);
+            if (index > -1) {
+                selection.splice(index, 1);
+            }
+            seatCardDiv.className = "card bg-light";
+            seatCardH3.className = "card-sub text-dark text-center";
+        } else if (seatCardDiv.className.includes("bg-light")) {
+            count++;
+            selection.push(j);
+            seatCardDiv.className = "card bg-success";
+            seatCardH3.className = "card-sub text-light text-center";
+        }
+        selection.sort();
+        seatCountInp.value = count;
+        selectedSeatsInp.value = selection.toString();
+        ticketPriceInp.value = count * totalAmount;
+
+        selectedSeatsItemField.innerText = "Selected Seats : " + selection.toString();
+        if (ticketPriceInp.value != 0) {
+            totalAmountItemField.innerText = "Total Ticket Price : " + ticketPriceInp.value;
+        } else {
+            totalAmountItemField.innerText = "Total Ticket Price : ";
+        }
+    }
+
+    function getSeatCount()
+    {
+        if (count <= 0) {
+            return false;
+        }
+        return true;
+    }
+</script>

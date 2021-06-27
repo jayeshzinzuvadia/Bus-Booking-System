@@ -1,0 +1,100 @@
+﻿@model IEnumerable<BusListViewModel>
+
+@{
+    ViewBag.Title = "View Bus List";
+    var bus = Model.ToList();
+}
+
+<h2 class="text-center">View Bus List</h2>
+<hr class="bg-danger" />
+<div class="row mt-3">
+    <div class="col">
+        <a class="btn btn-danger mb-3" style="width:auto" asp-action="AddNewBus" asp-controller="Admin">
+            Add New Bus
+        </a>
+    </div>
+</div>
+
+@if (ViewBag.TotalNoOfBus > 0)
+{    
+    <div class="row mb-3">
+        <div class="col font-weight-bold">
+            Total Buses : @ViewBag.TotalNoOfBus
+        </div>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Bus</th>
+                <th>Type</th>
+                <th>Ratings</th>
+                <th>Bus Operator</th>
+                <th>Bus No.</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for(int id = 0; id < ViewBag.TotalNoOfBus; id++)
+            {
+                <tr>
+                    <td>@bus[id].Bus.BusName</td>
+                    <td>@bus[id].Bus.BusType</td>
+                    @if (bus[id].Bus.Ratings != null)
+                    {
+                        <td>
+                            <h6><span class="badge badge-warning text-light">@bus[id].Bus.Ratings &#9733;</span></h6>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                    <td>@bus[id].BusOperatorName</td>
+                    <td>@bus[id].Bus.BusVehicleNumber</td>
+                    <td>
+                        <div class="row">
+                            <div class="col">
+                                <form asp-action="RemoveBus" asp-controller="Admin" asp-route-busId="@bus[id].Bus.BusId" method="post">
+                                    <a class="btn btn-outline-danger" asp-action="ViewBusRouteList" asp-controller="Admin" asp-route-busId="@bus[id].Bus.BusId">Bus Routes</a>
+                                    <a class="btn btn-outline-danger" asp-action="UpdateBus" asp-controller="Admin" asp-route-busId="@bus[id].Bus.BusId">Update</a>
+                                    <button type="button" class="btn btn-outline-danger" data-toggle="modal" data-target="#exampleModal_@id">
+                                        Remove
+                                    </button>
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="exampleModal_@id" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel_@id" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel_@id">Remove Bus</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to remove this bus and delete all the data?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="card">
+        <div class="card-header text-danger">
+            Bus List is empty
+        </div>
+    </div>
+}
