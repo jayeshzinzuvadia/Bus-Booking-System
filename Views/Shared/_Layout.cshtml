@@ -66,7 +66,7 @@
                                     </li>
                                 }
                             }
-                            else if (User.IsInRole(AppConstant.BUS_OPERATOR))
+                            @if (User.IsInRole(AppConstant.BUS_OPERATOR))
                             {
                                 <!--Navigation Menu for Bus Operator-->
                                 <li class="nav-item">
@@ -75,7 +75,7 @@
                                     </a>
                                 </li>
                             }
-                            else if (User.IsInRole(AppConstant.PASSENGER))
+                            @if (User.IsInRole(AppConstant.PASSENGER))
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Passenger" asp-action="ManageBookings">

@@ -56,9 +56,12 @@ namespace BusBookingSystem.Controllers
 
         string FormatDateOfJourney(DateTime dateOfJourney)
         {
+            string monthZeroPrefix = "", dayZeroPrefix = "";
             if (dateOfJourney.Month < 10)
-                return dateOfJourney.Year + "-0" + dateOfJourney.Month + "-" + dateOfJourney.Day;
-            return dateOfJourney.Year + "-" + dateOfJourney.Month + "-" + dateOfJourney.Day;
+                monthZeroPrefix = "0";
+            if (dateOfJourney.Day < 10)
+                dayZeroPrefix = "0";
+            return dateOfJourney.Year + "-" + monthZeroPrefix + dateOfJourney.Month + "-" + dayZeroPrefix + dateOfJourney.Day;
         }
 
         [HttpGet]
@@ -204,7 +207,6 @@ namespace BusBookingSystem.Controllers
             // Check if seat for a given busRouteId and dateOfBooking exists or not
             if (seatObj == null)
             {
-                // Copy seat structures of other routes for avoiding collision between routes
                 // If seat doesn't exist then create a new seat row from the given dateOfBooking and busRouteId
                 seatObj = new Seat
                 {
@@ -221,6 +223,7 @@ namespace BusBookingSystem.Controllers
                 seatObj.SeatStructure = seatObj.SeatStructure + "," + selectedSeats;
                 seatRepository.Update(seatObj);
             }
+            // Copy seat structures of other routes for avoiding collision between routes
 
             // Manage ticket table
             Ticket ticket = new Ticket
@@ -287,7 +290,7 @@ namespace BusBookingSystem.Controllers
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(AppConstant.ORGANIZATION_NAME, AppConstant.ORGANIZATION_EMAIL_ADDRESS));
             message.To.Add(new MailboxAddress(model.Passengers[0].PName, model.Ticket.PEmail));
-            message.Subject = "Bus Ticket from " + model.Ticket.Source 
+            message.Subject = "Bus Ticket Booked from " + model.Ticket.Source 
                                 + " to " + model.Ticket.Destination 
                                 + " on " + model.Ticket.DateOfJourney.ToLongDateString();
             message.Body = new TextPart(MimeKit.Text.TextFormat.Html)

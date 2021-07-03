@@ -51,6 +51,10 @@
                             <label asp-for="BusOperatorId"></label>
                             <select asp-for="BusOperatorId" asp-items="@ViewBag.AvailBusOperatorUserList" class="form-control">
                                 <option value="@ViewBag.BusOperatorId">@ViewBag.BusOperatorName</option>
+                                @if (ViewBag.BusOperatorId != "")
+                                {
+                                    <option value="">None</option>
+                                }
                             </select>
                             <span asp-validation-for="BusOperatorId" class="text-danger"></span>
                         </div>
