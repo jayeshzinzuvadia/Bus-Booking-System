@@ -29,6 +29,20 @@
 ## Video Link : [Watch Bus Booking System in Action]()
 
 ## Screenshots
+<p align="center"><img src="Screenshots/PassengerHome.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/Login.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/UserRegistration.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/BusSearch.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/SeatLayout.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/PassengerDetails.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/TicketPayment.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/ViewTicket.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/EmailView.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/ViewPassengerList.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/PassengerCheckList.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/ViewBusList.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/ViewUserList.jpg" width="800"></img></p>
+<p align="center"><img src="Screenshots/ManageTicket.jpg" width="800"></img></p>
 
 ## How to set up and run this project
 **Note**: My .NET Core version is **3.1** and I am using Visual Studio 2019 IDE.
