@@ -27,8 +27,10 @@ namespace BusBookingSystem.Models
         // Organizaion's Email Information
         // Very Confidential Information
         public const string ORGANIZATION_NAME = "Bus Booking System Project";
-        public const string ORGANIZATION_EMAIL_ADDRESS = "busbookingsystem7@gmail.com";
-        public const string ORGANIZATION_PASSWORD = "BusBookingSystem@7";
+        // Create another gmail account for Bus Booking System
+        public const string ORGANIZATION_EMAIL_ADDRESS = "Your Email Address";
+        public const string ORGANIZATION_PASSWORD = "Your Password";
+        // SMTP port and address
         public const string SMTP_ADDRESS = "smtp.gmail.com";
         public const int SMTP_PORT = 587;
 
